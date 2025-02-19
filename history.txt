@@ -1,11 +1,18 @@
 docker-compose up --build
+docker-compose down
+devcontainer up --remove-existing-container --workspace-folder .
+
+
+
+--- old --------
+
 docker-compose exec test sh /scripts/test_web-proxy.sh
 docker-compose exec test sh /scripts/purge_image1.sh
 
 docker-compose exec test sh /scripts/test_web.sh
 ---
 
-docker-compose down
+
 
 find . -type f \( -name "*.sh" -o -name "*.conf" -o -name "*.yml" \) -exec dos2unix {} \;
 
