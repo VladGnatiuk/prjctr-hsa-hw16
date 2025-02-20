@@ -1,7 +1,8 @@
 docker-compose up --build
 docker-compose down
 devcontainer up --remove-existing-container --workspace-folder .
-
+---
+docker exec -it kali /kali/scripts/start_attack.sh
 
 
 --- old --------

@@ -8,10 +8,16 @@ services:
       - ./web/published_content:/usr/share/nginx/html:ro
       - ./web/conf.d:/etc/nginx/conf.d:ro
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
-    expose:
-      - "80"
+    ports:
+      - "5080:80"
     networks:
       - network1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+    expose:
+      - "0-65535/udp"
 
   kali:
     image: kalilinux/kali-rolling
@@ -22,6 +28,7 @@ services:
       - ./kali:/kali:rw
     networks:
       - network1
+    command: tail -f /dev/null
 
 networks:
   network1:
