@@ -40,3 +40,6 @@ docker compose exec kali bash -c "ping web"
 ```
 
 - ICMP flood makes no effect on the target
+
+![ICMP flood](image-1.png)
+

@@ -5,18 +5,19 @@ docker-compose up --build
 docker-compose down
 devcontainer up --remove-existing-container --workspace-folder .
 ---
-docker exec -it kali /kali/scripts/setup_kali.sh
+docker exec -it kali /workspace/scripts/setup_kali.sh
 # or
-docker-compose exec --user root kali bash -c "/kali/scripts/setup_kali.sh"
+docker-compose exec --user root kali bash -c "/workspace/scripts/setup_kali.sh"
 
-docker exec -it kali /kali/scripts/udp_flood.sh
-docker exec -it kali /kali/scripts/icmp_flood.sh
+docker exec -it kali /workspace/scripts/udp_flood.sh
+docker exec -it kali /workspace/scripts/icmp_flood.sh
+docker exec -it kali /workspace/scripts/http_flood.sh
 
 docker compose exec kali bash -c "ping web"
 
 ---
 # from web container
-sh /kali/scripts/setup_web.sh
+sh /workspace/scripts/setup_web.sh
 
 docker-compose exec --user root web sh -c "iptables -L -v -n"
 docker-compose exec --user root web sh -c "iptables -A INPUT -p icmp --icmp-type echo-request -j DROP"
