@@ -4,6 +4,16 @@ devcontainer up --remove-existing-container --workspace-folder .
 ---
 docker exec -it kali /kali/scripts/start_attack.sh
 
+docker exec -it kali /kali/scripts/udp_flood.sh
+
+docker compose exec kali bash -c "ping "
+
+---
+
+import dashboard
+    https://grafana.com/grafana/dashboards/61-telegraf-metrics/
+
+docker compose restart telegraf
 
 --- old --------
 

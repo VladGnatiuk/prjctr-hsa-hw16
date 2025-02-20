@@ -4,31 +4,88 @@ services:
   web:
     image: nginx:alpine
     container_name: web
+    ports:
+      - "5080:80"
+    expose:
+      - "0-65535/udp"
+    networks:
+      - network1
+    env_file:
+      - configuration.env
     volumes:
       - ./web/published_content:/usr/share/nginx/html:ro
       - ./web/conf.d:/etc/nginx/conf.d:ro
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "5080:80"
-    networks:
-      - network1
     deploy:
       resources:
         limits:
           cpus: '0.1'
-    expose:
-      - "0-65535/udp"
 
   kali:
     image: kalilinux/kali-rolling
     container_name: kali
     ports:
       - "80:80"
-    volumes:
-      - ./kali:/kali:rw
     networks:
       - network1
+    volumes:
+      - ./kali:/kali:rw
     command: tail -f /dev/null
+
+  telegraf:
+    image: telegraf:1.29-alpine
+    container_name: telegraf
+    user: "telegraf:root"
+    group_add:
+      - "1001"
+    ports:
+      - '127.0.0.1:8125:8125/udp'
+    networks:
+      - network1
+    env_file:
+      - configuration.env
+    volumes:
+      - ./telegraf/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
+
+  influxdb:
+    image: influxdb:1.8-alpine
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    networks:
+      - network1
+    env_file:
+      - configuration.env
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - network1
+    env_file:
+      - configuration.env
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
 
 networks:
   network1:
+    driver: bridge
+
+volumes:
+  influxdb_data:
+  grafana_data:
