@@ -4,6 +4,9 @@ services:
   web:
     image: nginx:alpine
     container_name: web
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     ports:
       - "5080:80"
     expose:
@@ -16,6 +19,7 @@ services:
       - ./web/published_content:/usr/share/nginx/html:ro
       - ./web/conf.d:/etc/nginx/conf.d:ro
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./kali:/kali:rw
     deploy:
       resources:
         limits:
@@ -24,6 +28,9 @@ services:
   kali:
     image: kalilinux/kali-rolling
     container_name: kali
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     ports:
       - "80:80"
     networks:

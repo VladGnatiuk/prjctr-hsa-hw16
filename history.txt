@@ -1,13 +1,37 @@
+todo: HTTP flood, Slowloris, SYN flood, Ping of Death
+
+
 docker-compose up --build
 docker-compose down
 devcontainer up --remove-existing-container --workspace-folder .
 ---
-docker exec -it kali /kali/scripts/start_attack.sh
+docker exec -it kali /kali/scripts/setup_kali.sh
+# or
+docker-compose exec --user root kali bash -c "/kali/scripts/setup_kali.sh"
 
 docker exec -it kali /kali/scripts/udp_flood.sh
+docker exec -it kali /kali/scripts/icmp_flood.sh
 
-docker compose exec kali bash -c "ping "
+docker compose exec kali bash -c "ping web"
 
+---
+# from web container
+sh /kali/scripts/setup_web.sh
+
+docker-compose exec --user root web sh -c "iptables -L -v -n"
+docker-compose exec --user root web sh -c "iptables -A INPUT -p icmp --icmp-type echo-request -j DROP"
+
+---
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+iptables -L -v -n
+# Reverse the rull
+iptables -D INPUT -p icmp --icmp-type echo-request -j DROP
+---
+ufw deny proto icmp
+ufw enable
+ufw status
+# Reverse the rull
+ufw allow proto icmp
 ---
 
 import dashboard
