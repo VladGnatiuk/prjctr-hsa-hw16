@@ -46,3 +46,11 @@ docker compose exec kali bash -c "ping web"
 # HTTP flood
 - HTTP flood actually made the site unavaialble
 ![alt text](image-2.png)
+
+
+# slowloris
+- slowloris worked
+![alt text](image-3.png)
+
+# SYN flood
+- Didn't affect the target

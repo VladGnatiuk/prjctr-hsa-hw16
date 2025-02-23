@@ -14,6 +14,10 @@ docker exec -it kali /workspace/scripts/icmp_flood.sh
 docker exec -it kali /workspace/scripts/http_flood.sh
 
 docker compose exec kali bash -c "ping web"
+    172.26.0.2 - out into slowloris.sh
+
+docker exec -it kali /workspace/scripts/slowloris.sh
+docker exec -it kali /workspace/scripts/syn_flood.sh
 
 ---
 # from web container
@@ -36,6 +40,7 @@ ufw allow proto icmp
 ---
 
 import dashboard
+    http://localhost:3000/dashboard/import
     https://grafana.com/grafana/dashboards/61-telegraf-metrics
 
 docker compose restart telegraf
