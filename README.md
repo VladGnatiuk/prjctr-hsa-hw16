@@ -43,3 +43,6 @@ docker compose exec kali bash -c "ping web"
 
 ![ICMP flood](image-1.png)
 
+# HTTP flood
+- HTTP flood actually made the site unavaialble
+![alt text](image-2.png)

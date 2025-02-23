@@ -36,7 +36,7 @@ ufw allow proto icmp
 ---
 
 import dashboard
-    https://grafana.com/grafana/dashboards/61-telegraf-metrics/
+    https://grafana.com/grafana/dashboards/61-telegraf-metrics
 
 docker compose restart telegraf
 
