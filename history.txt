@@ -18,6 +18,7 @@ docker compose exec kali bash -c "ping web"
 
 docker exec -it kali /workspace/scripts/slowloris.sh
 docker exec -it kali /workspace/scripts/syn_flood.sh
+docker exec -it kali /workspace/scripts/ping_od.sh
 
 ---
 # from web container

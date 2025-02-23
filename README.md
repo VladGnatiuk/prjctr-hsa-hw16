@@ -52,5 +52,10 @@ docker compose exec kali bash -c "ping web"
 - slowloris worked
 ![alt text](image-3.png)
 
+
 # SYN flood
 - Didn't affect the target
+
+
+# Ping of Death
+- Ping of Death made no affect
