@@ -45,11 +45,25 @@ docker compose exec kali bash -c "ping web"
 
 # HTTP flood
 - HTTP flood actually made the site unavaialble
+- applying the following protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present!
+```
+    limit_conn_zone $binary_remote_addr zone=addr:10m;
+    limit_req_zone $binary_remote_addr zone=req:10m rate=1r/s;
+
+    limit_conn addr 10;
+    limit_req zone=req burst=5 nodelay;
+
+    client_body_timeout 10s;
+    client_header_timeout 10s;
+    keepalive_timeout 5s 5s;
+    send_timeout 10s;
+```
 ![alt text](image-2.png)
 
 
 # slowloris
 - slowloris worked
+- the same as with HTTP flood, applying the protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present!
 ![alt text](image-3.png)
 
 

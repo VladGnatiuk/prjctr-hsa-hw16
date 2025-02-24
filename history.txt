@@ -18,7 +18,6 @@ docker compose exec kali bash -c "ping web"
 
 docker exec -it kali /workspace/scripts/slowloris.sh
 docker exec -it kali /workspace/scripts/syn_flood.sh
-docker exec -it kali /workspace/scripts/ping_od.sh
 
 ---
 # from web container
@@ -62,6 +61,7 @@ docker compose exec web-proxy nginx -s reload
 
 docker compose exec web-proxy apt-get update && docker compose exec web-proxy apt-get install -y tree
 docker compose exec web-proxy tree /tmp/nginx_cache
-docker compose exec web-proxy bash -c "rm -rf /tmp/nginx_cache && nginx -s reload"
+docker compose exec web-proxy bash -c "rm -rf /tdocker exec -it kali /workspace/scripts/ping_od.sh
+mp/nginx_cache && nginx -s reload"
 ---
 
