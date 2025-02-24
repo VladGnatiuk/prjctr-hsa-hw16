@@ -45,25 +45,50 @@ docker compose exec kali bash -c "ping web"
 
 # HTTP flood
 - HTTP flood actually made the site unavaialble
-- applying the following protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present!
+- applying the following protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present.
 ```
     limit_conn_zone $binary_remote_addr zone=addr:10m;
-    limit_req_zone $binary_remote_addr zone=req:10m rate=1r/s;
+    limit_req_zone $binary_remote_addr zone=req:10m rate=5r/s;
 
     limit_conn addr 10;
     limit_req zone=req burst=5 nodelay;
-
-    client_body_timeout 10s;
-    client_header_timeout 10s;
-    keepalive_timeout 5s 5s;
-    send_timeout 10s;
 ```
+- error from blocked requests were written into the log taking resources, that made some legit client requests fail. Changing logging settings helped:
+```
+    # Set log level to warn to avoid logging blocked requests
+    limit_conn_log_level warn;
+    limit_conn_log_level warn;
+    
+    error_page 503 = @limit_req;
+
+    location @limit_req {
+        internal;
+        access_log off;
+        return 503;
+    }
+```
+- at the beginning of the attack resource was unavaialble for a short period of time regardles of all the protection.
 ![alt text](image-2.png)
 
 
 # slowloris
 - slowloris worked
-- the same as with HTTP flood, applying the protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present!
+- adding the following protection made target partially avaialble, defenitely increased the number of successfull client requets but fail requests were still present.
+```
+    client_body_timeout 2s;
+    client_header_timeout 1s;
+    keepalive_timeout 2s 2s;
+    send_timeout 2s;
+```
+- in addition to the limits above we need to reduce logging of the failed requests, otherwisew it saturates resources anyway:
+```
+    map $status $loggable {
+        default 1;
+        408     0;  # Do not log 408 status codes
+    }
+    access_log /var/log/nginx/access.log combined if=$loggable;
+```
+- only after applying limits AND reducing logging nginx was able to serve clients while being attacked.
 ![alt text](image-3.png)
 
 
